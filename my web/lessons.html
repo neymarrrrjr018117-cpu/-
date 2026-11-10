@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>آموزش پایتون به سبک دانش‌آموزی</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <h2>🐍 آموزش پایتون</h2>
+
+        <nav>
+
+            <button onclick="showPage('home')">
+                🏠 خانه
+            </button>
+
+            <button onclick="showPage('chapters')">
+                📚 فصل‌ها
+            </button>
+
+            <button onclick="showPage('progress')">
+                📊 درصد یادگیری
+            </button>
+
+        </nav>
+
+    </header>
+
+
+    <main>
+
+        <!-- صفحه اصلی -->
+
+        <section id="home" class="page">
+
+            <h1>
+                🐍 آموزش پایتون به سبک دانش‌آموزی
+            </h1>
+
+            <p>
+                پایتون رو از صفر تا پیشرفته،
+                ساده و مرحله‌به‌مرحله یاد بگیر.
+            </p>
+
+            <button onclick="showPage('chapters')">
+                🚀 شروع آموزش
+            </button>
+
+        </section>
+
+
+        <!-- فصل‌ها -->
+
+        <section id="chapters" class="page">
+
+            <h1>
+                📚 فصل‌های آموزش
+            </h1>
+
+            <p>
+                یک فصل را انتخاب کن و یادگیری را شروع کن.
+            </p>
+
+            <div id="chapterList">
+
+                <button onclick="openChapter(1)">
+                    📘 فصل ۱ — آشنایی با پایتون
+                </button>
+
+                <button onclick="openChapter(2)">
+                    ⌨️ فصل ۲ — input
+                </button>
+
+                <button onclick="openChapter(3)">
+                    📦 فصل ۳ — متغیرها
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- درصد یادگیری -->
+
+        <section id="progress" class="page">
+
+            <h1>
+                📊 درصد یادگیری
+            </h1>
+
+            <p>
+                پیشرفت کلی شما:
+            </p>
+
+            <div class="progress-box">
+
+                <div id="progressBar"></div>
+
+            </div>
+
+            <h2 id="progressText">
+                ۰٪
+            </h2>
+
+        </section>
+
+
+        <!-- صفحه فصل -->
+
+        <section id="chapterPage" class="page">
+
+            <button onclick="showPage('chapters')">
+                ⬅️ برگشت به فصل‌ها
+            </button>
+
+            <h1 id="chapterTitle">
+                عنوان فصل
+            </h1>
+
+            <p id="chapterDescription">
+                توضیحات فصل
+            </p>
+
+            <div id="lessonList">
+            </div>
+
+            <br>
+
+            <button onclick="startQuiz(currentChapter)">
+                📝 آزمون این فصل
+            </button>
+
+        </section>
+
+
+        <!-- صفحه درس -->
+
+        <section id="lessonPage" class="page">
+
+            <button onclick="showPage('chapterPage')">
+                ⬅️ برگشت
+            </button>
+
+            <h1 id="lessonTitle">
+                عنوان درس
+            </h1>
+
+            <div id="lessonContent">
+            </div>
+
+            <button onclick="finishLesson()">
+                ✅ یاد گرفتم
+            </button>
+
+            <br>
+            <br>
+
+            <button onclick="previousLesson()">
+                ⬅️ درس قبلی
+            </button>
+
+            <button onclick="nextLesson()">
+                درس بعدی ➡️
+            </button>
+
+        </section>
+
+
+        <!-- صفحه آزمون -->
+
+        <section id="quizPage" class="page">
+
+            <button onclick="showPage('chapterPage')">
+                ⬅️ برگشت به فصل
+            </button>
+
+            <h1 id="quizTitle">
+                📝 آزمون
+            </h1>
+
+            <div id="quizContent">
+            </div>
+
+            <div id="quizResult">
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- اتصال جاوااسکریپت -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
