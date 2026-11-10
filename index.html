@@ -1,0 +1,669 @@
+[11/10/2026 7:06 AM] SOLO: <!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<title>آموزش پایتون</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Tahoma;
+    direction: rtl;
+    background: #101827;
+    color: white;
+}
+
+header {
+    background: #17243a;
+    padding: 20px;
+    text-align: center;
+}
+
+button {
+    background: #2878ff;
+    color: white;
+    border: 0;
+    padding: 12px 18px;
+    margin: 6px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+button:hover {
+    background: #145dcc;
+}
+
+.page {
+    display: none;
+    padding: 25px;
+    max-width: 900px;
+    margin: auto;
+}
+
+.card {
+    background: #17243a;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 15px;
+}
+
+.lesson {
+    background: #22324d;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.progress {
+    background: #333;
+    height: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress div {
+    background: #28c76f;
+    height: 100%;
+    width: 0%;
+}
+
+pre {
+    background: #080d16;
+    padding: 15px;
+    border-radius: 10px;
+    direction: ltr;
+    text-align: left;
+}
+
+.option {
+    display: block;
+    width: 90%;
+    text-align: right;
+}
+
+#home {
+    display: block;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🐍 آموزش پایتون</h1>
+
+    <button onclick="page('home')">🏠 خانه</button>
+    <button onclick="page('chapters')">📚 فصل‌ها</button>
+    <button onclick="page('progress')">📊 پیشرفت من</button>
+</header>
+
+
+<!-- خانه -->
+<div id="home" class="page">
+
+    <div class="card">
+        <h2>🎓 آموزش پایتون به سبک دانش‌آموزی</h2>
+
+        <p>
+            اینجا پایتون رو مرحله به مرحله یاد می‌گیری.
+        </p>
+
+        <button onclick="page('chapters')">
+            🚀 شروع آموزش
+        </button>
+    </div>
+
+</div>
+
+
+<!-- فصل ها -->
+<div id="chapters" class="page">
+
+    <h2>📚 فصل‌های آموزش</h2>
+
+    <div class="card">
+        <h3>فصل ۱ — آشنایی با پایتون</h3>
+        <p>شروع کار با پایتون و دستور print</p>
+
+        <button onclick="chapter(0)">
+            ورود به فصل ۱
+        </button>
+    </div>
+
+    <div class="card">
+        <h3>فصل ۲ — input</h3>
+        <p>گرفتن اطلاعات از کاربر</p>
+
+        <button onclick="chapter(1)">
+            ورود به فصل ۲
+        </button>
+    </div>
+
+    <div class="card">
+        <h3>فصل ۳ — متغیرها</h3>
+        <p>آشنایی با متغیرها</p>
+
+        <button onclick="chapter(2)">
+            ورود به فصل ۳
+        </button>
+    </div>
+
+</div>
+
+
+<!-- صفحه فصل -->
+<div id="chapterPage" class="page">
+
+    <button onclick="page('chapters')">⬅️ برگشت</button>
+
+    <h2 id="chapterTitle"></h2>
+
+    <p id="chapterText"></p>
+
+    <div id="lessons"></div>
+
+    <button onclick="quizStart()">
+        📝 آزمون این فصل
+    </button>
+
+</div>
+
+
+<!-- صفحه درس -->
+<div id="lessonPage" class="page">
+
+    <button onclick="page('chapterPage')">⬅️ برگشت</button>
+
+    <h2 id="lessonTitle"></h2>
+
+    <div class="card" id="lessonText"></div>
+
+    <button onclick="learned()">
+        ✅ یاد گرفتم
+    </button>
+
+    <br>
+
+    <button onclick="previousLesson()">
+        ⬅️ درس قبلی
+    </button>
+
+    <button onclick="nextLesson()">
+        درس بعدی ➡️
+    </button>
+
+</div>
+
+
+<!-- آزمون -->
+<div id="quizPage" class="page">
+
+    <button onclick="page('chapterPage')">
+        ⬅️ برگشت
+    </button>
+
+    <h2>📝 آزمون</h2>
+
+    <div class="card">
+
+        <h3 id="question"></h3>
+
+        <div id="answers"></div>
+
+    </div>
+
+    <p id="quizResult"></p>
+
+</div>
+
+
+<!-- پیشرفت -->
+<div id="progress" class="page">
+
+    <h2>📊 پیشرفت من</h2>
+
+    <div class="card">
+
+        <p id="percent">۰٪</p>
+
+        <div class="progress">
+            <div id="bar"></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+var currentChapter = 0;
+var currentLesson = 0;
+var learnedLessons = 0;
+
+var data = [
+
+    {
+        title: "فصل ۱ — آشنایی با پایتون",
+
+        text: "در این فصل با پایتون و دستور print آشنا می‌شویم.",
+
+        lessons: [
+            {
+                title: "درس ۱ — پایتون چیست؟",
+                text: `
+                <h3>پایتون چیست؟</h3>
+[11/10/2026 7:06 AM] SOLO: <p>
+                پایتون یک زبان برنامه‌نویسی ساده و پرکاربرد است.
+                </p>
+
+                <p>
+                با پایتون می‌توان برنامه، بازی، سایت و برنامه‌های مختلف ساخت.
+                </p>
+                
+            },
+
+            {
+                title: "درس ۲ — دستور print",
+                text: 
+                <h3>دستور print</h3>
+
+                <p>
+                برای نمایش یک چیز روی صفحه از print استفاده می‌کنیم.
+                </p>
+
+                <pre>print("Hello")</pre>
+
+                <p>
+                خروجی این برنامه Hello است.
+                </p>
+                
+            },
+
+            {
+                title: "درس ۳ — اولین برنامه",
+                text: 
+                <h3>اولین برنامه</h3>
+
+                <p>
+                می‌توانیم یک پیام ساده نمایش دهیم.
+                </p>
+
+                <pre>print("سلام")</pre>
+                
+            }
+        ],
+
+        questions: [
+            {
+                q: "پایتون چیست؟",
+                a: ["بازی", "زبان برنامه‌نویسی", "مرورگر", "سیستم عامل"],
+                correct: 1
+            },
+
+            {
+                q: "برای نمایش اطلاعات از چه دستوری استفاده می‌کنیم؟",
+                a: ["input", "float", "print", "int"],
+                correct: 2
+            },
+
+            {
+                q: "خروجی print(10 + 5) چیست؟",
+                a: ["10", "5", "105", "15"],
+                correct: 3
+            }
+        ]
+    },
+
+
+    {
+        title: "فصل ۲ — input",
+
+        text: "در این فصل یاد می‌گیریم چطور از کاربر اطلاعات بگیریم.",
+
+        lessons: [
+            {
+                title: "درس ۱ — input چیست؟",
+                text: 
+                <h3>دستور input</h3>
+
+                <p>
+                با input می‌توانیم از کاربر اطلاعات بگیریم.
+                </p>
+
+                <pre>input()</pre>
+                
+            },
+
+            {
+                title: "درس ۲ — گرفتن نام",
+                text: 
+                <h3>گرفتن اطلاعات</h3>
+
+                <p>
+                مثلاً می‌توانیم نام کاربر را بگیریم.
+                </p>
+
+                <pre>name = input()</pre>
+                
+            },
+
+            {
+                title: "درس ۳ — input و عدد",
+                text: 
+                <h3>گرفتن عدد</h3>
+
+                <p>
+                input به صورت معمول اطلاعات را به شکل متن می‌گیرد.
+                </p>
+
+                <pre>age = int(input())</pre>
+                
+            }
+        ],
+
+        questions: [
+            {
+                q: "input برای چه کاری است؟",
+                a: ["گرفتن اطلاعات", "چاپ کردن", "حذف فایل", "اجرای بازی"],
+                correct: 0
+            },
+
+            {
+                q: "برای تبدیل ورودی به عدد صحیح از چه چیزی استفاده می‌کنیم؟",
+                a: ["print", "int", "input", "str"],
+                correct: 1
+            },
+
+            {
+                q: "input معمولاً اطلاعات را چگونه دریافت می‌کند؟",
+                a: ["تصویر", "صدا", "متن", "بازی"],
+                correct: 2
+            }
+        ]
+    },
+
+
+    {
+        title: "فصل ۳ — متغیرها",
+
+        text: "در این فصل با متغیرها آشنا می‌شویم.",
+
+        lessons: [
+            {
+                title: "درس ۱ — متغیر چیست؟",
+                text: 
+                <h3>متغیر چیست؟</h3>
+
+                <p>
+                متغیر را می‌توان مثل یک جعبه برای نگهداری اطلاعات در نظر گرفت.
+                </p>
+
+                <pre>age = 15</pre>
+                
+            },
+
+            {
+                title: "درس ۲ — تغییر مقدار",
+                text: 
+                <h3>تغییر مقدار متغیر</h3>
+
+                <p>
+                مقدار یک متغیر می‌تواند تغییر کند.
+                </p>
+
+                <pre>age = 15
+age = 16</pre>
+                
+            },
+
+            {
+                title: "درس ۳ — استفاده از متغیر",
+                text: 
+                <h3>استفاده از متغیر</h3>
+
+                <p>
+                می‌توانیم مقدار متغیر را چاپ کنیم.
+                </p>
+[11/10/2026 7:06 AM] SOLO: <pre>age = 15
+print(age)</pre>
+                `
+            }
+        ],
+
+        questions: [
+            {
+                q: "متغیر را می‌توان به چه چیزی تشبیه کرد؟",
+                a: ["مانیتور", "جعبه اطلاعات", "کیبورد", "پرینتر"],
+                correct: 1
+            },
+
+            {
+                q: "در age = 15 مقدار age چیست؟",
+                a: ["15", "age", "0", "هیچ‌کدام"],
+                correct: 0
+            },
+
+            {
+                q: "آیا مقدار متغیر می‌تواند تغییر کند؟",
+                a: ["خیر", "فقط یک بار", "بله", "فقط در ویندوز"],
+                correct: 2
+            }
+        ]
+    }
+
+];
+
+
+function page(name) {
+
+    var pages = document.querySelectorAll(".page");
+
+    for (var i = 0; i < pages.length; i++) {
+        pages[i].style.display = "none";
+    }
+
+    document.getElementById(name).style.display = "block";
+}
+
+
+function chapter(number) {
+
+    currentChapter = number;
+    currentLesson = 0;
+
+    document.getElementById("chapterTitle").innerText =
+        data[number].title;
+
+    document.getElementById("chapterText").innerText =
+        data[number].text;
+
+    var box = document.getElementById("lessons");
+
+    box.innerHTML = "";
+
+    for (var i = 0; i < data[number].lessons.length; i++) {
+
+        box.innerHTML +=
+            "<div class='lesson' onclick='lesson(" + i + ")'>" +
+            data[number].lessons[i].title +
+            "</div>";
+
+    }
+
+    page("chapterPage");
+}
+
+
+function lesson(number) {
+
+    currentLesson = number;
+
+    document.getElementById("lessonTitle").innerText =
+        data[currentChapter].lessons[number].title;
+
+    document.getElementById("lessonText").innerHTML =
+        data[currentChapter].lessons[number].text;
+
+    page("lessonPage");
+}
+
+
+function nextLesson() {
+
+    if (currentLesson < data[currentChapter].lessons.length - 1) {
+
+        currentLesson++;
+
+        lesson(currentLesson);
+
+    } else {
+
+        alert("🎉 این فصل را تمام کردی!");
+
+        page("chapterPage");
+    }
+}
+
+
+function previousLesson() {
+
+    if (currentLesson > 0) {
+
+        currentLesson--;
+
+        lesson(currentLesson);
+
+    }
+}
+
+
+function learned() {
+
+    learnedLessons++;
+
+    updateProgress();
+
+    alert("✅ آفرین! درس یاد گرفته شد.");
+
+    page("chapterPage");
+}
+
+
+function updateProgress() {
+
+    var total = 9;
+
+    var percent = Math.round(
+        learnedLessons / total * 100
+    );
+
+    if (percent > 100) {
+        percent = 100;
+    }
+
+    document.getElementById("percent").innerText =
+        percent + "٪";
+
+    document.getElementById("bar").style.width =
+        percent + "%";
+}
+
+
+var questionNumber = 0;
+var score = 0;
+
+
+function quizStart() {
+
+    questionNumber = 0;
+    score = 0;
+
+    page("quizPage");
+
+    showQuestion();
+}
+
+
+function showQuestion() {
+
+    var questions =
+        data[currentChapter].questions;
+
+    if (questionNumber >= questions.length) {
+
+        document.getElementById("question").innerText =
+            "🎉 آزمون تمام شد!";
+
+        document.getElementById("answers").innerHTML =
+            "";
+
+        document.getElementById("quizResult").innerText =
+            "نمره شما: " +
+            score +
+            " از " +
+            questions.length;
+
+        return;
+    }
+
+    var q = questions[questionNumber];
+
+    document.getElementById("question").innerText =
+        q.q;
+
+    var box = document.getElementById("answers");
+
+    box.innerHTML = "";
+
+    for (var i = 0; i < q.a.length; i++) {
+
+        box.innerHTML +=
+            "<button class='option' onclick='answer(" +
+            i +
+            ")'>" +
+            q.a[i] +
+            "</button>";
+
+    }
+}
+
+
+function answer(number) {
+
+    var q =
+        data[currentChapter].questions[questionNumber];
+
+    if (number == q.correct) {
+
+        score++;
+
+        alert("✅ درست!");
+
+    } else {
+
+        alert("❌ اشتباه!");
+
+    }
+
+    questionNumber++;
+
+    showQuestion();
+}
+
+
+updateProgress();
+
+</script>
+
+<footer>
+    ساخته شده توسط آرین کابانی
+    <br>
+    پشتیبانی تلگرام:
+    <a href="https://t.me/Sh0008887" target="_blank">@Sh0008887</a>
+</footer>
+
+</body>
+</html>
